@@ -1,0 +1,43 @@
+# Please refer https://aka.ms/HTTPSinContainer on how to setup an https developer certificate for your ASP .NET Core service.
+
+version: '3.4'
+
+services:
+  shopping.db: 
+    container_name: shoppingdb
+    image: mongo
+    restart: always
+    ports:
+      - 27017:27017
+    volumes:
+      - ${WEBAPP_STORAGE_HOME}/site:/data/db   
+
+  shopping.api:
+    container_name: shoppingapi
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - "DatabaseSettings:ConnectionString=mongodb://shoppingdb:27017"
+    image: ${DOCKER_REGISTRY-}shoppingapi
+    depends_on: 
+      - shopping.db
+    build:
+      context: .
+      dockerfile: src/Shopping.API/Dockerfile
+    ports:
+      - 5000:5000
+
+  shoppingclient:
+    container_name: shoppingapp
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - "ShoppingApiUrl=http://shoppingapi:5000"
+    image: ${DOCKER_REGISTRY-}shoppingclient
+    depends_on: 
+      - shopping.db
+      - shopping.api
+    build:
+      context: .
+      dockerfile: src/Shopping.Client/Dockerfile
+    ports:
+      - 5001:5001
+      
