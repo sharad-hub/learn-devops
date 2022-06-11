@@ -92,6 +92,26 @@
             "netCore": {
                 "appProject": "${workspaceFolder}/src/Shopping.Client/Shopping.Client.csproj"
             }
+        },
+        {
+            "label": "bridge-to-kubernetes.resource",
+            "type": "bridge-to-kubernetes.resource",
+            "resource": "shoppingapi-service",
+            "resourceType": "service",
+            "ports": [
+                5005
+            ],
+            "targetCluster": "docker-desktop",
+            "targetNamespace": "default",
+            "useKubernetesServiceEnvironmentVariables": false
+        },
+        {
+            "label": "bridge-to-kubernetes.compound",
+            "dependsOn": [
+                "bridge-to-kubernetes.resource",
+                "build"
+            ],
+            "dependsOrder": "sequence"
         }
     ]
 }

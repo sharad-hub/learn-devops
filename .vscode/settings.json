@@ -1,0 +1,5 @@
+{
+    "yaml.schemas": {
+        "kubernetes://schema/apps/v1@deployment+v1@service": "file:///c%3A/Code/learn-v2/learn-devops/src/k8s/shoppingapi.yaml"
+    }
+}
